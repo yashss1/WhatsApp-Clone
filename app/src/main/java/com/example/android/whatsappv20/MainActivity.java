@@ -2,6 +2,7 @@ package com.example.android.whatsappv20;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Sample List
     ListView listView;
-    String[] name = {"Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash"};
-    ArrayAdapter<String> arrayAdapter;
+    ArrayList<String> stringArrayList = new ArrayList<>();
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
         // For Vibrations
         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        //Sample List
+        listView = findViewById(R.id.sample_list);
+        for(int i = 0;i<=100;i++)stringArrayList.add("Item " + i);
+        adapter = new ArrayAdapter<>(MainActivity.this,
+                android.R.layout.simple_list_item_1, stringArrayList);
+        listView.setAdapter(adapter);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
@@ -69,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
+
+
+
         });
 
         //Changing the Width of Camera Title
@@ -99,9 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Learning SearchView Search
         MenuItem menuItem = menu.findItem(R.id.search_menu);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 //        searchView.setQueryHint("Search...");
-
 
         // This method is called when Search is in Action
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -114,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
 
                 //For future use use this to search:
-                 arrayAdapter.getFilter().filter(newText);
+                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -147,11 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default: break;
         }
-
-        //Sample List
-        listView = findViewById(R.id.sample_list);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
-
 
         return super.onOptionsItemSelected(item);
     }
