@@ -14,12 +14,9 @@
         android:layout_height="wrap_content"
         android:background="@color/dark_green"
         app:elevation="0dp">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="WhatsApp"
-            app:titleTextColor="@color/white"/>
+        <include layout="@layout/toolbar_state_normal" />
+        <include layout="@layout/toolbar_state_search_opened"
+            android:visibility="gone"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.tabs.TabLayout

@@ -14,17 +14,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private androidx.appcompat.widget.Toolbar toolbar;
     FloatingActionButton fab;
+
+    //Sample List
+    ListView listView;
+    String[] name = {"Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash","Yash"};
+    ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +88,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Toolbar
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.normal_toolbar);
         setSupportActionBar(toolbar); // setSupprotAction bar worked for the first time
-//        toolbar.setSubtitle("Test Subtitle"); // If u want to add something below the heading
-//        toolbar.inflateMenu(R.menu.menu_main);
     }
 
     // Below methods bind menu to toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Learning SearchView Search
+        MenuItem menuItem = menu.findItem(R.id.search_menu);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+//        searchView.setQueryHint("Search...");
+
+
+        // This method is called when Search is in Action
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                //For future use use this to search:
+                 arrayAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
     @Override
@@ -117,6 +147,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default: break;
         }
+
+        //Sample List
+        listView = findViewById(R.id.sample_list);
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
+
+
         return super.onOptionsItemSelected(item);
     }
 }
