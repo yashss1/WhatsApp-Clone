@@ -20,8 +20,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
-        getSupportActionBar().hide(); //hide the title bar
+
+        // To hide the title bar
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
+//        getSupportActionBar().hide(); //hide the title bar
+
         // TO hide the status bar (which contains charging ana all)
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
