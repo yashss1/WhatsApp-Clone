@@ -2,6 +2,7 @@ package com.example.android.whatsappv20;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,7 +19,6 @@ import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -45,12 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         // For Vibrations
         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        //Sample List
-        listView = findViewById(R.id.sample_list);
-        for(int i = 0;i<=100;i++)stringArrayList.add("Item " + i);
-        adapter = new ArrayAdapter<>(MainActivity.this,
-                android.R.layout.simple_list_item_1, stringArrayList);
-        listView.setAdapter(adapter);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
@@ -59,35 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        //Displaying Camera Image in TabLayout
-        tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-
-
-
-        });
+        displayCamera(tabLayout);
 
         //Changing the Width of Camera Title
-        LinearLayout layout = ((LinearLayout) ((LinearLayout) tabLayout.getChildAt(0)).getChildAt(0));
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
-        layoutParams.weight = 0.5f; // e.g. 0.5f
-        layout.setLayoutParams(layoutParams);
+        camLayoutWidthChange(tabLayout);
 
+        // Floating Action Button Next Activity Intent
         fab = findViewById(R.id.fab_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,27 +78,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        // Learning SearchView Search
-        MenuItem menuItem = menu.findItem(R.id.search_menu);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-//        searchView.setQueryHint("Search...");
-
-        // This method is called when Search is in Action
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                //For future use use this to search:
-                 adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
         return super.onCreateOptionsMenu(menu);
     }
     @Override
@@ -159,5 +109,57 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void displayCamera(TabLayout tabLayout){
+        //Displaying Camera Image in TabLayout
+        tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tabLayout.getTabAt(0).setIcon(R.drawable.camera_state);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    public void searchTheText(){
+//         Learning SearchView Search (NOT WORKING)
+        MenuItem menuItem = findViewById(R.id.search_menu);
+        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView)
+        MenuItemCompat.getActionView(menuItem);
+//        searchView.setQueryHint("Search...");
+
+        // This method is called when Search is in Action
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //For future use use this to search:
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+    }
+
+    public void camLayoutWidthChange(TabLayout tabLayout){
+        LinearLayout layout = ((LinearLayout) ((LinearLayout) tabLayout.getChildAt(0)).getChildAt(0));
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
+        layoutParams.weight = 0.5f; // e.g. 0.5f
+        layout.setLayoutParams(layoutParams);
     }
 }
